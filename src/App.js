@@ -1,25 +1,41 @@
-import logo from './logo.svg';
 import './App.css';
+import Header from './components/Header'; // Adjust the path if needed
+import LocationTab from './components/locationTab'; // Adjust the path if needed
+import ChargingTab from './components/chargingTab'; // Adjust the path if needed
+import PaymentTab from './components/paymentTab'; // Adjust the path if needed
+import { useLocation, LocationContext } from './components/locationContext';
+import React, { useContext } from 'react';
+
+
 
 function App() {
+  const { hasInput } = useContext(LocationContext);
+
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div className="App" style={{ backgroundColor: '#303539', height: '100%' }}> 
+      <header>
+        <Header />
       </header>
+      {/* <div className='mainContainer'> */}
+
+      <div className="belowLogo">
+        <LocationTab />
+        <div className="belowLocation">
+          <ChargingTab />
+          <div className={`belowTime ${hasInput ? '' : 'belowTime-blurred'}`}>
+            <PaymentTab />
+          </div>
+        </div>
+      </div>
+      
+        
+
+      {/* </div> */}
+      
     </div>
   );
 }
+
 
 export default App;
