@@ -13,7 +13,7 @@ function App() {
 
   
   return (
-    <div className="App" style={{ backgroundColor: '#303539', height: '100%' }}> 
+    <div className="App" style={{ backgroundColor: '#67DF7C', height: '100%' }}> 
       <header>
         <Header />
       </header>
@@ -21,16 +21,15 @@ function App() {
 
       <div className="belowLogo">
         <LocationTab />
-        <div className="belowLocation">
+        <div className={`belowLocation ${hasInput ? '' : 'belowLocation-blurred'}`}>
           <ChargingTab />
-          <div className={`belowTime ${hasInput ? '' : 'belowTime-blurred'}`}>
+          <div className="belowTime">
             <PaymentTab />
           </div>
         </div>
       </div>
-      
+      <div className="footer" />      
         
-
       {/* </div> */}
       
     </div>

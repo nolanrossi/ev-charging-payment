@@ -67,7 +67,7 @@ const styles = {
         width: '100%', // Adjust as needed
         height: '120px', // Adjust as needed
         padding: '16px', // Optional: If you want some space inside the box
-        boxShadow: '0px 4px 6px rgba(0,0,0,0.1)',
+        boxShadow: '4px 4px 6px  rgba(0,0,0,0.2)',
     },
     chargingText: {
         fontFamily: "'Noto Sans TC Variable', sans-serif",

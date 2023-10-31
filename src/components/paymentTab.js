@@ -11,6 +11,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWallet } from '@fortawesome/free-solid-svg-icons';
 import { faCreditCard } from '@fortawesome/free-solid-svg-icons';
 import PayButton from './payButton';
+import ApplePayButton from './applePayButton';
+import GooglePayButton from './googlePayButton';
+
+
 import breadIcon from '../static/breadIcon.png'; // Importing the image
 
 
@@ -38,7 +42,7 @@ const PaymentTab = () => {
         </div>
         <div style={styles.dottedLine}></div>
         <div 
-            style={termsAccepted ? styles.shadedTotalContainer : styles.totalContainer}
+            style={styles.totalContainer}
             onChange={() => setTermsAccepted(!termsAccepted)}
         >
 
@@ -54,6 +58,12 @@ const PaymentTab = () => {
             </label>
 
         </div>
+        <div style={styles.alternativePaymentOuter}>
+            <ApplePayButton/>
+            <GooglePayButton/>
+
+        </div>
+
         <div style={styles.editContainer}>
 
             <div style={styles.cardInputSection}>
@@ -132,6 +142,13 @@ const styles = {
         alignItems: 'stretch',
         padding: '24px'
     },
+    alternativePaymentOuter: {
+        display: 'flex',
+        flexDirection: 'row',
+        marginBottom: '24px',
+        gap: '16px'
+
+    },
     dottedLine: {
         height: 0,
         borderTop: '2px dashed #a3a3a3',  // Change 'black' to any color you prefer
@@ -140,7 +157,7 @@ const styles = {
     editContainer: {
         padding: '16px',
         borderRadius: '20px',
-        boxShadow: '0px 4px 6px rgba(0,0,0,0.1)',
+        boxShadow: '4px 4px 6px  rgba(0,0,0,0.2)',
         backgroundColor: 'white',
     },
     paymentRow: {
@@ -250,30 +267,12 @@ const styles = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white',
         padding: '6px',
         position: 'relative', // This is added to position the priceText in the middle
-        marginBottom: '24px',
+        marginBottom: '9px',
         borderRadius: '12px',
-        border: '2px solid #ffffff',
-        boxShadow: '0px 4px 6px rgba(0,0,0,0.1)',
         fontFamily: "'Noto Sans TC Variable', sans-serif",
         fontWeight: '500',  
-    },
-    shadedTotalContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'white',
-        padding: '6px',
-        position: 'relative', // This is added to position the priceText in the middle
-        marginBottom: '24px',
-        borderRadius: '12px',
-        border: '2px solid #70ee9b',
-        boxShadow: '0px 4px 6px rgba(0,0,0,0.1)',
-        fontFamily: "'Noto Sans TC Variable', sans-serif",
-        fontWeight: '500',  
-        
     },
     totalText: {
         fontFamily: 'quicksand',

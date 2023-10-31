@@ -23,11 +23,19 @@ import { useLocation } from './locationContext';
 const LocationTab = () => {
     const { hasInput, setHasInput } = useLocation();
     const [isFocused, setIsFocused] = useState(false);
+    const inputRef = React.useRef(null);  // Create a ref for the input element
 
     const handleInputChange = (e) => {
         setHasInput(e.target.value !== "");
-
     };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();  // Prevents the default form submission behavior
+            inputRef.current.blur();  // Blurs the input field to remove focus
+        }
+    };
+    
 
   return (
     <div style={styles.locationContainer}>
@@ -42,12 +50,13 @@ const LocationTab = () => {
         </div>
         <div style={styles.locationInputRow}>
             <input 
+                ref={inputRef}  // Set the ref property to inputRef
                 style={isFocused ? styles.focusedLocationInput : styles.locationInput} 
                 placeholder="Type location code" 
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                 onChange={handleInputChange}
-
+                onKeyDown={handleKeyDown}  // Set the onKeyDown prop to handleKeyDown
             />
         </div>
     </div>
@@ -96,7 +105,7 @@ const styles = {
         padding: '8px',
         border: '2px solid #ffffff',
         borderRadius: '12px',
-        boxShadow: '0px 4px 6px rgba(0,0,0,0.1)',
+        boxShadow: '4px 4px 6px  rgba(0,0,0,0.2)',
         paddingLeft: '12px',
 
         

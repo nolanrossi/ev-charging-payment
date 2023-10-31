@@ -10,30 +10,38 @@
   background: linear-gradient(to bottom, #ffffff, #9c9c9c);
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
 }
+
 
 .belowLocation {
   box-sizing: border-box; /* This ensures padding doesn't add to the width/height */
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - 180px);
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(227, 227, 227, 0.5));
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
 }
 
+
 .belowTime {
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(227, 227, 227, 0.6));
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7));
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
   transition: filter 0.4s ease;
 
 }
 
-.belowTime-blurred {
+.belowLocation-blurred {
   filter: blur(4px);
   position: relative;
 }
 
-.belowTime-blurred::after {
+.belowLocation-blurred::after {
   content: "";
   position: absolute;
   border-top-left-radius: 40px;
@@ -44,4 +52,9 @@
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.4);
   pointer-events: none;
+}
+
+.footer {
+  height: 60px;
+  background-color: #67DF7C;
 }
