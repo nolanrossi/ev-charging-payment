@@ -1,8 +1,10 @@
 import './App.css';
-import Header from './components/Header'; // Adjust the path if needed
-import LocationTab from './components/locationTab'; // Adjust the path if needed
-import ChargingTab from './components/chargingTab'; // Adjust the path if needed
-import PaymentTab from './components/paymentTab'; // Adjust the path if needed
+import Header from './components/Header'; 
+import LocationTab from './components/locationTab'; 
+import ChargingTab from './components/chargingTab'; 
+import PaymentTab from './components/paymentTab'; 
+import InlineCartPage from './components/InlineCartPage.js';
+
 import { useLocation, LocationContext } from './components/locationContext';
 import React, { useContext } from 'react';
 

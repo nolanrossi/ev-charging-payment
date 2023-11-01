@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import CollectJSSection from "./CollectJSSection";
+import '../App.css';
 
 
 import "@fontsource/readex-pro";
@@ -26,13 +28,70 @@ const PaymentTab = () => {
     const [isCardFocused, setIsCardFocused] = useState(false);
     const [isExpryFocused, setIsExpryFocused] = useState(false);
     const [isCVVFocused, setIsCVVFocused] = useState(false);
-    const [isCardNameFocused, setIsCardNameFocused] = useState(false);
-    const [isZipFocused, setIsZipFocused] = useState(false);
+    const [isCardFirstNameFocused, setIsCardFirstNameFocused] = useState(false);
+    const [isLastNameFocused, setIsCardLastNameFocused] = useState(false);
     const [termsAccepted, setTermsAccepted] = useState(false);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [amount, setAmount] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
 
+    const stateRef = useRef();
+    stateRef.current = { firstName, lastName, amount };
+  
+    useEffect(() => {
+      window.CollectJS.configure({
+        variant: 'inline',
+        styleSniffer: false,
+        "customCss" : {
+            "border": "none",
+            "outline": "none",
+        },
+        "focusCss" : {
+            "border": "none",
+            "outline": "none",
+        },
+
+        callback: (token) => {
+          console.log(token);
+          finishSubmit(token);
+        },
+        fields: {
+          ccnumber: {
+            placeholder: '1234 1234 1234 1234',
+            selector: '#ccnumber',
+          },
+          ccexp: {
+            placeholder: 'MM/YY',
+            selector: '#ccexp'
+          },
+          cvv: {
+            placeholder: '123',
+            selector: '#cvv'
+          }
+        }
+      });
+    }, []);
+  
+    const finishSubmit = (response) => {
+      const formData = {
+        ...stateRef.current, // Use the ref's current value
+        token: response.token
+      };
+      console.log(formData);
+      setIsSubmitting(false);
+      setAlertMessage('The form was submitted. Check the console to see the output data.');
+    }
+  
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      setIsSubmitting(true);
+      window.CollectJS.startPaymentRequest();
+    }
 
   return (
-    <div style={styles.paymentContainer}>
+    <div className="payform" style={styles.paymentContainer}>
         <div style={styles.paymentRow}>
             <div style={styles.paymentLeft}>
                 <img src={breadIcon} style={styles.paymentSymbol} />
@@ -63,73 +122,121 @@ const PaymentTab = () => {
             <GooglePayButton/>
 
         </div>
-
+        
         <div style={styles.editContainer}>
 
-            <div style={styles.cardInputSection}>
-                    <div style={styles.paymentHelperText}>
-                        Card
-                    </div>
-                <input 
-                    style={isCardFocused ? styles.focusedcardInput : styles.cardInput} 
-                    placeholder="1234 1234 1234 1234" 
-                    onFocus={() => setIsCardFocused(true)}
-                    onBlur={() => setIsCardFocused(false)}
-                />
+            {alertMessage && (
+                <div className="alert">
+                {alertMessage}
+                </div>
+            )}
+            <form onSubmit={handleSubmit}>
+                <React.Fragment>
 
-            </div>
-            <div style={styles.doubleInputRow}>
-                <div style={styles.paymentCol}>
-                    <div style={styles.paymentHelperText}>
-                        Expiry
+                    <div style={styles.cardInputSection}>
+                            <div style={styles.paymentHelperText}>
+                                Card
+                            </div>
+                        <div 
+                            id="ccnumber"
+                            style={isCardFocused ? styles.focusedcardInput : styles.cardInput} 
+                            placeholder="1234 1234 1234 1234" 
+                            onFocus={() => setIsCardFocused(true)}
+                            onBlur={() => setIsCardFocused(false)}
+                        />
+
                     </div>
-                    <input 
-                        style={isExpryFocused ? styles.focusedpaymentInput : styles.paymentInput} 
-                        placeholder="MM/YY" 
-                        onFocus={() => setIsExpryFocused(true)}
-                        onBlur={() => setIsExpryFocused(false)}
-                    />
-                </div>
-                <div style={styles.paymentCol}>
-                    <div style={styles.paymentHelperText}>
-                        CVV
+
+                    <div style={styles.doubleInputRow}>
+                        <div style={styles.paymentCol}>
+                            <div style={styles.paymentHelperText}>
+                                Expiry
+                            </div>
+                            <div 
+                                style={isExpryFocused ? styles.focusedpaymentInput : styles.paymentInput} 
+                                id="ccexp"
+                                placeholder="MM/YY" 
+                                onFocus={() => setIsExpryFocused(true)}
+                                onBlur={() => setIsExpryFocused(false)}
+                            />
+                        </div>
+                        <div style={styles.paymentCol}>
+                            <div style={styles.paymentHelperText}>
+                                CVV
+                            </div>
+                            <div 
+                                style={isCVVFocused ? styles.focusedpaymentInput : styles.paymentInput} 
+                                id="cvv"
+                                placeholder="123" 
+                                onFocus={() => setIsCVVFocused(true)}
+                                onBlur={() => setIsCVVFocused(false)}
+                            />
+                        </div>
+                        
                     </div>
-                    <input 
-                        style={isCVVFocused ? styles.focusedpaymentInput : styles.paymentInput} 
-                        placeholder="123" 
-                        onFocus={() => setIsCVVFocused(true)}
-                        onBlur={() => setIsCVVFocused(false)}
+                    <div style={styles.doubleInputRow}>
+                        <div style={styles.paymentCol}>
+                            <div style={styles.paymentHelperText}>
+                                First Name
+                            </div>
+                            <input 
+                                style={isCardFirstNameFocused ? styles.focusedpaymentInput : styles.paymentInput} 
+                                placeholder="John" 
+                                type="text"
+                                name="firstName"
+                                onChange={event => setFirstName(event.target.value)}
+                                value={firstName}
+
+
+
+                                onFocus={() => setIsCardFirstNameFocused(true)}
+                                onBlur={() => setIsCardFirstNameFocused(false)}
+                            />
+                        </div>
+                        <div style={styles.paymentCol}>
+                            <div style={styles.paymentHelperText}>
+                                Last Name
+                            </div>
+                            <input 
+                                style={isLastNameFocused ? styles.focusedpaymentInput : styles.paymentInput} 
+                                placeholder="Smith" 
+                                type="text"
+                                name="lastName"
+                                onChange={event => setLastName(event.target.value)}
+                                value={lastName}
+                                onFocus={() => setIsCardLastNameFocused(true)}
+                                onBlur={() => setIsCardLastNameFocused(false)}
+                            />
+                        </div>
+                        
+                    </div>
+
+                </React.Fragment>
+                <button style={styles.payButtonOuter}
+                    type="submit"
+                    disabled={isSubmitting}
+                >
+                    Pay
+                </button>
+
+
+                <div>
+                    <input
+                        type="text"
+                        name="amount"
+                        placeholder="Amount"
+                        onChange={event => setAmount(event.target.value)}
+                        value={amount}
                     />
                 </div>
                 
-            </div>
-            <div style={styles.doubleInputRow}>
-                <div style={styles.paymentCol}>
-                    <div style={styles.paymentHelperText}>
-                        Name on Card
-                    </div>
-                    <input 
-                        style={isCardNameFocused ? styles.focusedpaymentInput : styles.paymentInput} 
-                        placeholder="John Smith" 
-                        onFocus={() => setIsCardNameFocused(true)}
-                        onBlur={() => setIsCardNameFocused(false)}
-                    />
-                </div>
-                <div style={styles.paymentCol}>
-                    <div style={styles.paymentHelperText}>
-                        Zip Code
-                    </div>
-                    <input 
-                        style={isZipFocused ? styles.focusedpaymentInput : styles.paymentInput} 
-                        placeholder="12345" 
-                        onFocus={() => setIsZipFocused(true)}
-                        onBlur={() => setIsZipFocused(false)}
-                    />
-                </div>
-                
-            </div>
-            <PayButton/>
+
+            </form>
+
         </div>
+
+
+
 
     </div>
   );
@@ -319,7 +426,26 @@ const styles = {
         borderColor: '#70ee9b', //29a324
         backgroundColor: 'rgba(103, 223, 124, 0.6)',
         // rgba(115, 113, 235, 0.7)
-    }
+    },
+    payButtonOuter: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: '#FFFFFF', // This will make the text color white
+        borderRadius: '8px', // This will round the edges of the button
+        height: '60px',
+        width: '100%',
+        fontFamily: 'Readex Pro', // If you want to use the Readex Pro font for the button text
+        fontSize: '20px', // Adjust as needed
+        cursor: 'pointer', // This will change the cursor to a hand when hovering over the button
+        fontWeight: 'Bold',
+        marginTop: '12px',
+        boxShadow: '0px 4px 6px rgba(0,0,0,0.5)',
+        backgroundColor: undefined, // Remove the solid color
+        background: 'linear-gradient(90deg, #70ee9b, #59c13c)'
+
+
+    },
 };
 
 export default PaymentTab;
