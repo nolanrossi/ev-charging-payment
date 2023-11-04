@@ -6,13 +6,14 @@ import PaymentTab from './components/paymentTab';
 import InlineCartPage from './components/InlineCartPage.js';
 
 import { useLocation, LocationContext } from './components/locationContext';
-import React, { useContext } from 'react';
+import React, { useContext, useState} from 'react';
 
 
 
 function App() {
   const { hasInput } = useContext(LocationContext);
-
+  const [selectedHour, setSelectedHour] = useState(2);
+  const [hourlyCost] = useState('12');
 
   
   return (
@@ -26,9 +27,9 @@ function App() {
         <div className="belowLogo">
           <LocationTab />
           <div className={`belowLocation ${hasInput ? '' : 'belowLocation-blurred'}`}>
-            <ChargingTab />
+            <ChargingTab selectedHour={selectedHour} setSelectedHour={setSelectedHour} hourlyCost={hourlyCost}/>
             <div className="belowTime">
-              <PaymentTab />
+              <PaymentTab selectedHour={selectedHour} hourlyCost={hourlyCost} />
             </div>
           </div>
         </div>

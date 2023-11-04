@@ -9,10 +9,8 @@ import "@fontsource/quicksand";
 import '@fontsource-variable/noto-sans-tc';
 
 
-import ApplePayButton from './applePayButton';
-import GooglePayButton from './googlePayButton';
-
-
+import ApplePay from './ApplePay';
+import GooglePay from './GooglePay';
 import breadIcon from '../static/breadIcon.png'; // Importing the image
 
 
@@ -20,7 +18,7 @@ import breadIcon from '../static/breadIcon.png'; // Importing the image
 
 
 
-const PaymentTab = () => {
+const PaymentTab = ({ selectedHour, hourlyCost }) => {
     const [isCardFocused, setIsCardFocused] = useState(false);
     const [isExpryFocused, setIsExpryFocused] = useState(false);
     const [isCVVFocused, setIsCVVFocused] = useState(false);
@@ -29,13 +27,13 @@ const PaymentTab = () => {
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [amount, setAmount] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
+    const totalCost = selectedHour * hourlyCost
 
 
     const stateRef = useRef();
-    stateRef.current = { firstName, lastName, amount };
+    stateRef.current = { firstName, lastName, totalCost };
   
     useEffect(() => {
       window.CollectJS.configure({
@@ -92,7 +90,7 @@ const PaymentTab = () => {
             <div style={styles.paymentLeft}>
                 <img src={breadIcon} style={styles.paymentSymbol} />
                 <span style={styles.paymentText}>Total:</span>
-                <span style={styles.priceText}></span>
+                <span style={styles.priceText}>${totalCost}</span>
             </div>
         </div>
         <div style={styles.dottedLine}></div>
@@ -114,8 +112,8 @@ const PaymentTab = () => {
 
         </div>
         <div style={styles.alternativePaymentOuter}>
-            <ApplePayButton/>
-            <GooglePayButton/>
+            {/* <ApplePay/>
+            <GooglePay/> */}
 
         </div>
         
@@ -214,19 +212,6 @@ const PaymentTab = () => {
                 >
                     Pay
                 </button>
-
-
-                <div>
-                    <input
-                        type="text"
-                        name="amount"
-                        placeholder="Amount"
-                        onChange={event => setAmount(event.target.value)}
-                        value={amount}
-                    />
-                </div>
-                
-
             </form>
 
         </div>

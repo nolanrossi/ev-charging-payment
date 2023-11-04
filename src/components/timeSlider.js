@@ -2,10 +2,9 @@ import React, { useState, createContext } from 'react';
 import chargingIcon from '../static/chargingIcon.png'; // Importing the image
 
 
-const TimeSlider = () => {
+const TimeSlider = ({ selectedHour, setSelectedHour, hourlyCost }) => {
 
-        const [selectedHour, setSelectedHour] = useState(2); // Default to 2 hrs
-        const [hourlyCost] = useState('12');
+        
         const [isDragging, setIsDragging] = useState(false);
 
 

@@ -14,7 +14,7 @@ import TimeSlider from './timeSlider';
 import timeIcon from '../static/timeIcon.png'; // Importing the image
 
 
-const ChargingTab = () => {
+const ChargingTab = ({ selectedHour, setSelectedHour, hourlyCost }) => {
 
   return (
     <div style={styles.chargingContainer}>
@@ -26,7 +26,7 @@ const ChargingTab = () => {
         </div>
         <div style={styles.chargingRow}>
             <div style={styles.chargingTimeBox}>
-                <TimeSlider />
+                <TimeSlider selectedHour={selectedHour} setSelectedHour={setSelectedHour} hourlyCost={hourlyCost} />
             </div>
         </div>
     </div>
