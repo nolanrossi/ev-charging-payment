@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import CollectJSSection from "./CollectJSSection";
 import '../App.css';
 
@@ -9,10 +9,6 @@ import "@fontsource/quicksand";
 import '@fontsource-variable/noto-sans-tc';
 
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faWallet } from '@fortawesome/free-solid-svg-icons';
-import { faCreditCard } from '@fortawesome/free-solid-svg-icons';
-import PayButton from './payButton';
 import ApplePayButton from './applePayButton';
 import GooglePayButton from './googlePayButton';
 
@@ -37,13 +33,13 @@ const PaymentTab = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
 
+
     const stateRef = useRef();
     stateRef.current = { firstName, lastName, amount };
   
     useEffect(() => {
       window.CollectJS.configure({
         variant: 'inline',
-        styleSniffer: false,
         "customCss" : {
             "border": "none",
             "outline": "none",
@@ -96,7 +92,7 @@ const PaymentTab = () => {
             <div style={styles.paymentLeft}>
                 <img src={breadIcon} style={styles.paymentSymbol} />
                 <span style={styles.paymentText}>Total:</span>
-                <span style={styles.priceText}>$12</span>
+                <span style={styles.priceText}></span>
             </div>
         </div>
         <div style={styles.dottedLine}></div>

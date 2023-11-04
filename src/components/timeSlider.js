@@ -1,99 +1,99 @@
-import React, { useState } from 'react';
+import React, { useState, createContext } from 'react';
 import chargingIcon from '../static/chargingIcon.png'; // Importing the image
 
 
 const TimeSlider = () => {
-    const [selectedHour, setSelectedHour] = useState(2); // Default to 2 hrs
-    const [isDragging, setIsDragging] = useState(false);
+
+        const [selectedHour, setSelectedHour] = useState(2); // Default to 2 hrs
+        const [hourlyCost] = useState('12');
+        const [isDragging, setIsDragging] = useState(false);
 
 
+        const handleSliderClick = (e) => {
+            const rect = e.target.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const sectionWidth = rect.width / 3;
+        
+            if (clickX < sectionWidth) {
+                setSelectedHour(1);
+            } else if (clickX < 2 * sectionWidth) {
+                setSelectedHour(2);
+            } else {
+                setSelectedHour(3);
+            }
+        };
 
-    const [hourlyCost] = useState('12');
+        const handleCircleMouseDown = (e) => {
+            setIsDragging(true);
+            document.addEventListener('mousemove', handleCircleDrag);
+            document.addEventListener('mouseup', handleCircleDragEnd);
+        };
 
+        const handleCircleDrag = (e) => {
+            const rect = e.target.getBoundingClientRect();
+            let newHour;
 
+            if (e.clientX < rect.left + rect.width / 3) {
+                newHour = 1;
+            } else if (e.clientX < rect.left + 2 * rect.width / 3) {
+                newHour = 2;
+            } else {
+                newHour = 3;
+            }
 
-    const handleSliderClick = (e) => {
-        const rect = e.target.getBoundingClientRect();
-        const clickX = e.clientX - rect.left;
-        const sectionWidth = rect.width / 3;
-    
-        if (clickX < sectionWidth) {
-            setSelectedHour(1);
-        } else if (clickX < 2 * sectionWidth) {
-            setSelectedHour(2);
-        } else {
-            setSelectedHour(3);
-        }
-    };
+            setSelectedHour(newHour);
+        };
 
-    const handleCircleMouseDown = (e) => {
-        setIsDragging(true);
-        document.addEventListener('mousemove', handleCircleDrag);
-        document.addEventListener('mouseup', handleCircleDragEnd);
-    };
+        const handleCircleDragEnd = () => {
+            setIsDragging(false);
+            document.removeEventListener('mousemove', handleCircleDrag);
+            document.removeEventListener('mouseup', handleCircleDragEnd);
+        };
 
-    const handleCircleDrag = (e) => {
-        const rect = e.target.getBoundingClientRect();
-        let newHour;
+        return (
 
-        if (e.clientX < rect.left + rect.width / 3) {
-            newHour = 1;
-        } else if (e.clientX < rect.left + 2 * rect.width / 3) {
-            newHour = 2;
-        } else {
-            newHour = 3;
-        }
+                <div style={styles.outerSlider}>
+                    <div style={styles.costInfo}>$ {hourlyCost} / hr</div>
 
-        setSelectedHour(newHour);
-    };
-
-    const handleCircleDragEnd = () => {
-        setIsDragging(false);
-        document.removeEventListener('mousemove', handleCircleDrag);
-        document.removeEventListener('mouseup', handleCircleDragEnd);
-    };
-
-    return (
-        <div style={styles.outerSlider}>
-            <div style={styles.costInfo}>$ {hourlyCost} / hr</div>
-
-            <div style={styles.infoRow}>
-                <div style={styles.selectedHour}>
-                    {selectedHour} hrs            
-                </div>
-
-            </div>
-            
-                <div style={styles.sliderBar} onClick={handleSliderClick}>
-                    <div 
-                        style={{
-                            ...styles.shadedSliderBar, 
-                            width: `calc(${selectedHour === 1 ? '0%' : selectedHour === 2 ? 'calc(50% + 18px)' : '100%'})` 
-                        }}>
-                    </div>
-                    <div 
-                        style={{ 
-                            ...styles.circle, 
-                            left: `calc(${selectedHour === 1 ? '0%' : selectedHour === 2 ? 'calc(50% - 18px)' : 'calc(100% - 36px)'})` 
-                        }}
-                        onMouseDown={handleCircleMouseDown}
-                    >
-                        <img src={chargingIcon} style={styles.circleImage} />
+                    <div style={styles.infoRow}>
+                        <div style={styles.selectedHour}>
+                            {selectedHour} hrs            
+                        </div>
 
                     </div>
+                    
+                        <div style={styles.sliderBar} onClick={handleSliderClick}>
+                            <div 
+                                style={{
+                                    ...styles.shadedSliderBar, 
+                                    width: `calc(${selectedHour === 1 ? '0%' : selectedHour === 2 ? 'calc(50% + 18px)' : '100%'})` 
+                                }}>
+                            </div>
+                            <div 
+                                style={{ 
+                                    ...styles.circle, 
+                                    left: `calc(${selectedHour === 1 ? '0%' : selectedHour === 2 ? 'calc(50% - 18px)' : 'calc(100% - 36px)'})` 
+                                }}
+                                onMouseDown={handleCircleMouseDown}
+                            >
+                                <img src={chargingIcon} style={styles.circleImage} />
+
+                            </div>
+                        </div>
+                    <div style={styles.ticks}>
+                        <span>|</span>
+                        <span>|</span>
+                        <span>|</span>
+                    </div>
+                    <div style={styles.markers}>
+                        <span>1</span>
+                        <span>2</span>
+                        <span>3</span>
+                    </div>
                 </div>
-            <div style={styles.ticks}>
-                <span>|</span>
-                <span>|</span>
-                <span>|</span>
-            </div>
-            <div style={styles.markers}>
-                <span>1</span>
-                <span>2</span>
-                <span>3</span>
-            </div>
-        </div>
-    );
+
+        );
+
 };
 
 const styles = {
