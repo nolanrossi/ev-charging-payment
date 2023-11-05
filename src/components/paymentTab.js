@@ -12,7 +12,7 @@ import '@fontsource-variable/noto-sans-tc';
 import ApplePay from './ApplePay';
 import GooglePay from './GooglePay';
 import breadIcon from '../static/breadIcon.png'; // Importing the image
-
+import { NmiPayment } from './paymentPOSTRequest.js'; // Replace 'nameOfFile.js' with the actual name of the file containing the NmiPayment function.
 
 
 
@@ -75,7 +75,17 @@ const PaymentTab = ({ selectedHour, hourlyCost }) => {
       };
       console.log(formData);
       setIsSubmitting(false);
-      setAlertMessage('The form was submitted. Check the console to see the output data.');
+      setAlertMessage('The form was submitted. Check the console to see the output data. Proceeding to handle transaction');
+      handlePaymentSubmission(formData.totalCost, response.token, "123", "321", "123", formData.firstName, formData.lastName)
+
+    }
+    const handlePaymentSubmission = async (amount, paymentToken, cardNumber, ccExp, secCode, firstName, lastName) => {
+        try {
+            const response = await NmiPayment(amount, paymentToken, cardNumber, ccExp, secCode, firstName, lastName);
+            console.log(response);
+        } catch (error) {
+            console.error("Error processing payment:", error);
+        }
     }
   
     const handleSubmit = (event) => {
@@ -102,7 +112,7 @@ const PaymentTab = ({ selectedHour, hourlyCost }) => {
             <label style={styles.customCheckbox}>
                 <input
                 type="checkbox"
-                checked={termsAccepted}
+                defaultChecked={termsAccepted}
                 
                 style={styles.actualCheckbox}
                 />
